@@ -6,33 +6,38 @@ import os
 class Register(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.language_cog = bot.get_cog('Language')  # Obtén el *cog* Language
 
     @commands.command(name='register')
     async def register(self, ctx):
         user_id = str(ctx.author.id)
 
-        # Verifica si el archivo de datos existe
         if not os.path.exists('economy.json'):
             with open('economy.json', 'w') as f:
                 json.dump({}, f)
 
-        # Cargar datos
         with open('economy.json', 'r') as f:
             data = json.load(f)
 
-        # Verifica si el usuario ya está registrado
         if user_id in data:
-            await ctx.send("Ya estás registrado en el sistema de economía.")
+            if self.language_cog:
+                message = self.language_cog.get_translation(ctx.guild.id, 'already_registered')
+            else:
+                message = "Ya estás registrado en el sistema de economía."
+            await ctx.send(message)
             return
 
-        # Registrar al usuario y asignar monedas iniciales
         data[user_id] = {'balance': 500}
 
-        # Guardar datos
         with open('economy.json', 'w') as f:
             json.dump(data, f, indent=4)
         
-        await ctx.send(f"{ctx.author.mention} ha sido registrado con un saldo inicial de 500 monedas.")
+        if self.language_cog:
+            message = self.language_cog.get_translation(ctx.guild.id, 'registered').format(ctx.author.mention)
+        else:
+            message = f"{ctx.author.mention} ha sido registrado con un saldo inicial de 500 monedas."
+
+        await ctx.send(message)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Register(bot))

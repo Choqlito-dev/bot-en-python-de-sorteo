@@ -9,8 +9,8 @@ class ErrorCommand(commands.Cog):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             embed = discord.Embed(
-                title="No existe el comando",
-                description=f"El comando `{ctx.invoked_with}` no existe. Por favor, usa un comando válido.",
+                title="The command does not exist",
+                description=f"The command `{ctx.invoked_with}` Does not exist. Use a valid command.",
                 color=discord.Color.blue()
             )
 
