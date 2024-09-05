@@ -7,9 +7,9 @@ class Restart(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["r", "restart"])
+    @commands.command(aliases=["r"])
     @commands.is_owner()
-    async def reiniciar(self, ctx):
+    async def restart(self, ctx):
         await ctx.send("Reiniciando el bot...")
         await self.bot.close()
         os.execv(sys.executable, ['python'] + sys.argv)
