@@ -31,7 +31,7 @@ class EndGiveaway(commands.Cog):
                            f"**Ganadores:** {winner_mentions}\n",
                 color=discord.Color.green()
             )
-            embed.set_footer(text=f"Sorteo terminado")
+            embed.set_footer(text="Sorteo terminado")
             
             await message.edit(embed=embed)
             await message.channel.send(f"¡Felicitaciones {winner_mentions}! Ganaste: **{data['premio']}**")
@@ -39,7 +39,7 @@ class EndGiveaway(commands.Cog):
             del giveaways[message_id]
             save_giveaways(giveaways)
             
-        except:
+        except Exception as e:
             await ctx.send("No pude encontrar ese mensaje de sorteo.")
 
 async def setup(bot):

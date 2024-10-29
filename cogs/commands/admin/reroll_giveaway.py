@@ -23,7 +23,7 @@ class RerollGiveaway(commands.Cog):
             winner_mentions = ", ".join(winner.mention for winner in winners)
             await ctx.send(f"🎉 Nuevos ganadores: {winner_mentions}")
             
-        except:
+        except Exception as e:
             await ctx.send("No pude encontrar ese sorteo o ya no está disponible.")
 
 async def setup(bot):

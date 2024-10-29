@@ -16,8 +16,8 @@ def get_prefix(bot, message):
         prefixes = {}
     return prefixes.get(str(message.guild.id), "!")
 
+# Inicializa el bot con el prefijo y los intents necesarios
 bot = commands.Bot(command_prefix=get_prefix, intents=discord.Intents.all(), help_command=None)
-
 
 @bot.event
 async def on_ready():
@@ -25,7 +25,8 @@ async def on_ready():
     print(f'Bot {bot.user} ha iniciado')
     for root, dirs, files in os.walk('./cogs'):
         for filename in files:
-            if filename.endswith('.py') and filename != '__init__.py':
+            # Evitar cargar archivos en la carpeta 'utils' o que no sean .py
+            if filename.endswith('.py') and filename != '__init__.py' and 'utils' not in root:
                 cog_name = f'cogs.{os.path.relpath(os.path.join(root, filename), start="cogs").replace(os.path.sep, ".")[:-3]}'
                 try:
                     await bot.load_extension(cog_name)

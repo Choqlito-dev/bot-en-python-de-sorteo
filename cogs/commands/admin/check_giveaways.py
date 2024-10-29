@@ -1,6 +1,7 @@
+# cogs/commands/admin/check_giveaways.py
 import discord
-from discord.ext import commands, tasks
-from ..utils.giveaway_utils import load_giveaways, save_giveaways, select_winners
+from discord.ext import commands, tasks  # Asegúrate de que 'commands' esté aquí
+from cogs.commands.utils.giveaway_utils import load_giveaways, save_giveaways, select_winners
 import datetime
 
 class CheckGiveaways(commands.Cog):
@@ -27,7 +28,7 @@ class CheckGiveaways(commands.Cog):
                             embed = discord.Embed(
                                 title="🎉 SORTEO TERMINADO 🎉",
                                 description=f"**Premio:** {data['premio']}\n"
-                                           f"**Ganadores:** {winner_mentions}\n",
+                                            f"**Ganadores:** {winner_mentions}\n",
                                 color=discord.Color.green()
                             )
                             embed.set_footer(text="Sorteo terminado")
@@ -35,8 +36,8 @@ class CheckGiveaways(commands.Cog):
                             await message.edit(embed=embed)
                             await channel.send(f"¡Felicitaciones {winner_mentions}! Ganaste: **{data['premio']}**")
                         
-                except:
-                    pass
+                except Exception as e:
+                    print(f"Error al procesar el sorteo {giveaway_id}: {e}")
                 finally:
                     to_end.append(giveaway_id)
         
