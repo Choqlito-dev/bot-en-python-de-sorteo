@@ -1,6 +1,5 @@
-# cogs/commands/admin/check_giveaways.py
 import discord
-from discord.ext import commands, tasks  # Asegúrate de que 'commands' esté aquí
+from discord.ext import commands, tasks
 from cogs.commands.utils.giveaway_utils import load_giveaways, save_giveaways, select_winners
 import datetime
 
@@ -25,16 +24,26 @@ class CheckGiveaways(commands.Cog):
                         
                         if winners:
                             winner_mentions = ", ".join(winner.mention for winner in winners)
-                            embed = discord.Embed(
-                                title="🎉 SORTEO TERMINADO 🎉",
-                                description=f"**Premio:** {data['premio']}\n"
-                                            f"**Ganadores:** {winner_mentions}\n",
-                                color=discord.Color.green()
-                            )
-                            embed.set_footer(text="Sorteo terminado")
-                            
-                            await message.edit(embed=embed)
-                            await channel.send(f"¡Felicitaciones {winner_mentions}! Ganaste: **{data['premio']}**")
+                        
+                        # Calcular el tiempo desde el inicio del sorteo hasta el final
+                        start_time = data.get("start_time")
+                        if start_time:
+                            duration_text = f"Duración: <t:{start_time}:R> hasta <t:{data['end_time']}:R>"
+                        else:
+                            duration_text = "Duración no disponible."
+
+                        # Embed para el sorteo terminado
+                        embed = discord.Embed(
+                            title="🎉 SORTEO TERMINADO 🎉",
+                            description=f"**Premio:** {data['premio']}\n"
+                                        f"**Ganadores:** {winner_mentions}\n"
+                                        f"{duration_text}",
+                            color=discord.Color.green()
+                        )
+                        embed.set_footer(text="Sorteo terminado")
+                        
+                        await message.edit(embed=embed)
+                        await channel.send(f"¡Felicitaciones {winner_mentions}! Ganaste: **{data['premio']}**")
                         
                 except Exception as e:
                     print(f"Error al procesar el sorteo {giveaway_id}: {e}")
